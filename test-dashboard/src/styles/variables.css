@@ -1,0 +1,14 @@
+:root {
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --card-hover: #222633;
+  --border: #2a2e3d;
+  --accent: #4f8cff;
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --orange: #f39c12;
+  --text: #e0e0e0;
+  --text-muted: #8890a4;
+  --radius: 10px;
+}
+

@@ -1,0 +1,48 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  min-height: 62px;
+}
+ 
+.header-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text);
+}
+ 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+ 
+.conn-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+ 
+.conn-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+ 
+.conn-dot.online {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+ 
+.conn-label {
+  color: var(--text-muted);
+}

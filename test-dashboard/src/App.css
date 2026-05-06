@@ -1,0 +1,12 @@
+.app {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  height: calc(100vh - 62px);
+  background: var(--bg);
+}
