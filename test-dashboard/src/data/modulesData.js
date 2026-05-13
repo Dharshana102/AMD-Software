@@ -1,3 +1,13 @@
+import {
+  Plus,
+  Minus,
+  VolumeX,
+  Volume2,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward
+} from "lucide-react";
 export const MODULES = [
   {
     id: 'power',
@@ -27,10 +37,10 @@ export const MODULES = [
                 { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
               ],
               'Desktop': [
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
+                { id: 'time', label: 'Time (0-5 sec)', type: 'number', min: 0, max: 5, placeholder: 'Time' }
               ],
               'CRB': [
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
+                { id: 'time', label: 'Time (0-5 sec)', type: 'number', min: 0, max: 5, placeholder: 'Time' }
               ]
             }
           },
@@ -111,10 +121,35 @@ export const MODULES = [
             options: ['DP', 'HDMI', 'USB4']
           },
           {
+            type: 'select',
+            id: 'hp_number',
+            label: 'Port Number',
+            options: ['1', '2']
+          },
+          {
             type: 'buttons',
             items: [
               { label: 'Hotplug', cls: 'btn-success', action: 'disp_hotplug' },
               { label: 'Unplug', cls: 'btn-danger', action: 'disp_unplug' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'plug_status',
+        title: 'Display Plug Status',
+        desc: 'Check plug status for all display ports.',
+        controls: [
+          {
+            type: 'select',
+            id: 'plug_status_port',
+            label: 'Interface',
+            options: ['DP_1', 'DP_2', 'HDMI_1', 'HDMI_2', 'USB_1', 'USB_2']
+          },
+          {
+            type: 'buttons',
+            items: [
+              { label: 'Check Status', cls: 'btn-primary', action: 'check_plug_status' }
             ]
           }
         ]
@@ -153,12 +188,9 @@ export const MODULES = [
             fields: {
               'Laptop OEM': [
                 { id: 'angle', label: 'Angle (0-180°)', type: 'number', min: 0, max: 180, placeholder: 'Angle' },
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
+                { id: 'time', label: 'Time (0-300 sec)', type: 'number', min: 0, max: 300, placeholder: 'Time' }
               ],
-              'CRB': [
-                { id: 'angle', label: 'Angle (0-180°)', type: 'number', min: 0, max: 180, placeholder: 'Angle' },
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
-              ]
+              'CRB': []
             }
           },
           {
@@ -199,43 +231,21 @@ export const MODULES = [
     sub: 'Audio hotplug & Bluetooth',
     features: [
       {
-        id: 'hdmi_audio',
-        title: 'HDMI Audio Hotplug / Unplug',
-        desc: 'Simulate HDMI audio connection and disconnection.',
+        id: 'audio_hotplug',
+        title: 'Audio Hotplug / Unplug',
+        desc: 'Simulate audio device connection and disconnection for 3.5mm, USB-A, USB-C, HDMI.',
         controls: [
+          {
+            type: 'select',
+            id: 'audio_port',
+            label: 'Audio Port',
+            options: ['3.5_MM', 'USB_A', 'USB_C', 'HDMI']
+          },
           {
             type: 'buttons',
             items: [
-              { label: 'Hotplug', cls: 'btn-success', action: 'hdmi_audio_plug' },
-              { label: 'Unplug', cls: 'btn-danger', action: 'hdmi_audio_unplug' }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'usb_audio',
-        title: 'USB Audio Hotplug / Unplug',
-        desc: 'Simulate USB audio device connection and disconnection.',
-        controls: [
-          {
-            type: 'buttons',
-            items: [
-              { label: 'Hotplug', cls: 'btn-success', action: 'usb_audio_plug' },
-              { label: 'Unplug', cls: 'btn-danger', action: 'usb_audio_unplug' }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'jack_audio',
-        title: '3.5 mm Audio Jack Hotplug / Unplug',
-        desc: 'Simulate 3.5 mm audio jack insertion and removal.',
-        controls: [
-          {
-            type: 'buttons',
-            items: [
-              { label: 'Hotplug', cls: 'btn-success', action: 'jack_audio_plug' },
-              { label: 'Unplug', cls: 'btn-danger', action: 'jack_audio_unplug' }
+              { label: 'Hotplug', cls: 'btn-success', action: 'audio_hotplug' },
+              { label: 'Unplug', cls: 'btn-danger', action: 'audio_unplug' }
             ]
           }
         ]
@@ -246,11 +256,11 @@ export const MODULES = [
         desc: 'Control the Bluetooth receiver module.',
         controls: [
           {
-            type: 'toggle',
-            id: 'bt_recv_toggle',
-            label: 'Receiver',
-            action_on: 'bt_recv_on',
-            action_off: 'bt_recv_off'
+            type: 'buttons',
+            items: [
+              { label: 'Turn ON BT', cls: 'btn-success', action: 'bt_on' },
+              { label: 'Turn OFF BT', cls: 'btn-danger', action: 'bt_off' }
+            ]
           }
         ]
       },
@@ -262,53 +272,113 @@ export const MODULES = [
           {
             type: 'buttons',
             items: [
-              { label: 'Pair', cls: 'btn-primary', action: 'bt_pair' },
+              { label: 'Enable Pairing', cls: 'btn-primary', action: 'bt_pairing_mode' },
               { label: 'Connect', cls: 'btn-success', action: 'bt_connect' },
-              { label: 'Disconnect', cls: 'btn-danger', action: 'bt_disconnect' }
+              { label: 'Disconnect', cls: 'btn-danger', action: 'bt_disconnect' },
+              { label: 'Status', cls: 'btn-secondary', action: 'bt_status' }
             ]
           }
         ]
       },
       {
-        id: 'onboard_speaker',
-        title: 'Onboard Speaker',
-        desc: 'Test onboard speaker output.',
+        id: 'bt_name',
+        title: 'Bluetooth Name Change',
+        desc: 'Change the Bluetooth device name.',
         controls: [
           {
-            type: 'toggle',
-            id: 'spk_toggle',
-            label: 'Speaker',
-            action_on: 'spk_on',
-            action_off: 'spk_off'
+            type: 'dynamic',
+            id: 'bt_name_params',
+            label: 'Bluetooth Name',
+            fields: {
+              'default': [
+                { id: 'bt_name', label: 'New Name', type: 'text', min: 0, max: 100, placeholder: 'Enter BT name' }
+              ]
+            }
           },
           {
             type: 'buttons',
             items: [
-              { label: 'Play Test Tone', cls: 'btn-primary', action: 'spk_test' }
+              { label: 'Change Name', cls: 'btn-primary', action: 'bt_change_name' }
             ]
           }
         ]
       },
       {
-        id: 'dmic',
-        title: 'Onboard Microphone Array (DMIC)',
-        desc: 'Test the digital microphone array input.',
-        controls: [
-          {
-            type: 'toggle',
-            id: 'dmic_toggle',
-            label: 'DMIC',
-            action_on: 'dmic_on',
-            action_off: 'dmic_off'
-          },
-          {
-            type: 'buttons',
-            items: [
-              { label: 'Record Sample', cls: 'btn-primary', action: 'dmic_record' }
-            ]
-          }
-        ]
-      }
+  id: 'bt_audio_control',
+  title: 'Bluetooth Audio Control',
+  desc: 'Control audio playback and volume via Bluetooth.',
+  controls: [
+    {
+      type: 'buttons',
+      items: [
+        {
+          icon: Plus,
+          cls: 'btn-primary btn-icon',
+          action: 'bt_vol_up',
+          title: 'Volume Up'
+        },
+        {
+          icon: Minus,
+          cls: 'btn-primary btn-icon',
+          action: 'bt_vol_down',
+          title: 'Volume Down'
+        },
+        {
+          icon: VolumeX,
+          activeIcon: Volume2,
+          cls: 'btn-warning btn-icon',
+          action: 'bt_mute',
+          activeAction: 'bt_unmute',
+          toggle: true,
+          stateKey: 'isMuted',
+          title: 'Mute / Unmute'
+        },
+        {
+          icon: Play,
+          activeIcon: Pause,
+          cls: 'btn-success btn-icon',
+          action: 'bt_play',
+          activeAction: 'bt_pause',
+          toggle: true,
+          stateKey: 'isPlaying',
+          title: 'Play / Pause'
+        },
+        {
+          icon: SkipBack,
+          cls: 'btn-primary btn-icon',
+          action: 'bt_previous',
+          title: 'Previous'
+        },
+        {
+          icon: SkipForward,
+          cls: 'btn-primary btn-icon',
+          action: 'bt_next',
+          title: 'Next'
+        }
+      ]
+    }
+  ]
+      },
+      // {
+      //   id: 'dmic',
+      //   title: 'Onboard Microphone Array (DMIC)',
+      //   desc: 'Test the digital microphone array input.',
+      //   controls: [
+      //     {
+      //       type: 'toggle',
+      //       id: 'dmic_toggle',
+      //       label: 'DMIC',
+      //       action_on: 'dmic_on',
+      //       action_off: 'dmic_off'
+      //     },
+      //     {
+      //       type: 'buttons',
+      //       items: [
+      //         { label: 'Record Sample', cls: 'btn-primary', action: 'dmic_record' }
+      //       ]
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -320,30 +390,29 @@ export const MODULES = [
     features: [
       {
         id: 'camera_stepper',
-        title: 'Camera Actuation (Stepper Motor)',
-        desc: 'Control stepper motor for camera positioning.',
-        controls: [
-          {
-            type: 'dynamic',
-            id: 'camera_params',
-            label: 'Parameters',
-            fields: {
-              'default': [
-                { id: 'angle', label: 'Angle (0-180°)', type: 'number', min: 0, max: 180, placeholder: 'Angle' },
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
-              ]
-            }
-          },
-          {
-            type: 'buttons',
-            items: [
-              { label: 'Open', cls: 'btn-success', action: 'cam_open' },
-              { label: 'Close', cls: 'btn-danger', action: 'cam_close' },
-              { label: 'Step +', cls: 'btn-primary', action: 'cam_step_fwd' },
-              { label: 'Step −', cls: 'btn-secondary', action: 'cam_step_rev' }
-            ]
-          }
+  title: 'Camera Actuation (Stepper Motor)',
+  desc: 'Control stepper motor for camera positioning.',
+  controls: [
+    {
+      type: 'dynamic',
+      id: 'stepper_params',
+      label: 'Parameters',
+      fields: {
+        'default': [
+          { id: 'steps', label: 'Steps (0-2048)', type: 'number', min: 0, max: 2048, placeholder: 'Steps' },
+          { id: 'speed', label: 'Speed (ms)', type: 'number', min: 10, max: 1000, placeholder: 'Speed ms' }
         ]
+      }
+    },
+    {
+      type: 'buttons',
+      items: [
+        { label: 'CW Move', cls: 'btn-success', action: 'stepper_cw' },
+        { label: 'CCW Move', cls: 'btn-danger', action: 'stepper_ccw' },
+        { label: 'Stop', cls: 'btn-warning', action: 'stepper_stop' }
+      ]
+    }
+  ]
       },
       {
         id: 'rgb_illum',
@@ -351,13 +420,33 @@ export const MODULES = [
         desc: 'Control RGB LED illumination for ISP testing.',
         controls: [
           {
+            type: 'select',
+            id: 'led_id',
+            label: 'LED ID',
+            options: ['1', '2']
+          },
+          {
+            type: 'dynamic',
+            id: 'rgb_params',
+            label: 'RGB Values',
+            fields: {
+              '1': [
+                { id: 'r', label: 'R (0-255)', type: 'number', min: 0, max: 255, placeholder: 'R' },
+                { id: 'g', label: 'G (0-255)', type: 'number', min: 0, max: 255, placeholder: 'G' },
+                { id: 'b', label: 'B (0-255)', type: 'number', min: 0, max: 255, placeholder: 'B' }
+              ],
+              '2': [
+                { id: 'r', label: 'R (0-255)', type: 'number', min: 0, max: 255, placeholder: 'R' },
+                { id: 'g', label: 'G (0-255)', type: 'number', min: 0, max: 255, placeholder: 'G' },
+                { id: 'b', label: 'B (0-255)', type: 'number', min: 0, max: 255, placeholder: 'B' }
+              ]
+            }
+          },
+          {
             type: 'buttons',
             items: [
-              { label: 'Red', cls: 'btn-danger', action: 'rgb_red' },
-              { label: 'Green', cls: 'btn-success', action: 'rgb_green' },
-              { label: 'Blue', cls: 'btn-primary', action: 'rgb_blue' },
-              { label: 'White', cls: 'btn-secondary', action: 'rgb_white' },
-              { label: 'OFF', cls: 'btn-danger', action: 'rgb_off' }
+              { label: 'Set RGB', cls: 'btn-primary', action: 'rgb_set' },
+              { label: 'Turn OFF', cls: 'btn-danger', action: 'rgb_off' }
             ]
           }
         ]
@@ -409,12 +498,12 @@ export const MODULES = [
             fields: {
               'Laptop OEM': [
                 { id: 'angle', label: 'Angle (0-180°)', type: 'number', min: 0, max: 180, placeholder: 'Angle' },
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
+                { id: 'time', label: 'Time (0-300 sec)', type: 'number', min: 0, max: 300, placeholder: 'Time' }
               ],
               'CRB': [
                 { id: 'angle', label: 'Angle (0-180°)', type: 'number', min: 0, max: 180, placeholder: 'Angle' },
-                { id: 'time', label: 'Time (0-60 sec)', type: 'number', min: 0, max: 60, placeholder: 'Time' }
-              ]
+                { id: 'time', label: 'Time (0-300 sec)', type: 'number', min: 0, max: 300, placeholder: 'Time'}
+              ],
             }
           },
           {
@@ -455,9 +544,28 @@ export const MODULES = [
     sub: 'KVM capture & BIOS',
     features: [
       {
+        id: 'module_status',
+        title: 'Module Status Check',
+        desc: 'Check status of all modules (1-4).',
+        controls: [
+          {
+            type: 'select',
+            id: 'module_number',
+            label: 'Module Number',
+            options: ['1', '2', '3', '4']
+          },
+          {
+            type: 'buttons',
+            items: [
+              { label: 'Check Status', cls: 'btn-primary', action: 'check_module_status' }
+            ]
+          }
+        ]
+      },
+      {
         id: 'module1_info',
-        title: 'Module 1',
-        desc: 'Network information for Module 1',
+        title: 'RPI',
+        desc: 'Network information for Rpi',
         controls: [
           {
             type: 'info',
@@ -479,8 +587,8 @@ export const MODULES = [
       },
       {
         id: 'module2_info',
-        title: 'Module 2',
-        desc: 'Network information for Module 2',
+        title: 'STM32MP257F',
+        desc: 'Network information for STM32MP257F',
         controls: [
           {
             type: 'info',
@@ -499,7 +607,33 @@ export const MODULES = [
             ]
           }
         ]
-      }
+      },
+      // {
+      //   id: 'combinational_commands',
+      //   title: 'Combinational Commands',
+      //   desc: 'Execute combined power and display commands.',
+      //   controls: [
+      //     {
+      //       type: 'dynamic',
+      //       id: 'combo_params',
+      //       label: 'Parameters',
+      //       fields: {
+      //         'default': [
+      //           { id: 'delay_time', label: 'Delay (0-1000 sec)', type: 'number', min: 0, max: 1000, placeholder: 'Time' }
+      //         ]
+      //       }
+      //     },
+      //     {
+      //       type: 'buttons',
+      //       items: [
+      //         { label: 'Power ON with Delay', cls: 'btn-primary', action: 'pwron_with_delay' },
+      //         { label: 'Close Lid & Power ON', cls: 'btn-warning', action: 'close_lid_pwron' },
+      //         { label: 'Hotplug All Ports', cls: 'btn-success', action: 'hotplug_all' },
+      //         { label: 'Unplug All Ports', cls: 'btn-danger', action: 'unplug_all' }
+      //       ]
+      //     }
+      //   ]
+      // }
     ]
   }
 ];

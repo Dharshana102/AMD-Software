@@ -30,7 +30,7 @@ function MainPanel() {
   if (!module) return null;
  
   const status = moduleStatus[module.id];
-  const IconComponent = iconMap[module.icon] || Zap;
+  const IconComponent = iconMap[module.icon] || Power;
  
   return (
 <main className="main">

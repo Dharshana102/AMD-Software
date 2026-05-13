@@ -1,9 +1,17 @@
+/* Button Row Styles */
 .btn-row {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  margin-bottom: 6px;  /* Reduced margin between button groups */
 }
  
+/* Button group spacing for multiple button controls */
+.feature-card .btn-row:not(:last-child) {
+  margin-bottom: 8px;
+}
+ 
+/* Button Styles */
 .btn {
   padding: 7px 16px;
   border: none;
@@ -145,6 +153,27 @@
   user-select: all;
 }
  
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.btn-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.2;
+}
+
+.btn.active {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+
 .btn-copy {
   display: flex;
   align-items: center;
